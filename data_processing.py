@@ -18,6 +18,7 @@ class DataProcessing ():
 
     def df_to_classes(self):
 
+        # Relleno de materias en cada carrera y crea lista de carreras
         for i in self.major_data_frame.index: 
             major = m.Major(self.major_data_frame["id_carrera"][i],
                     self.major_data_frame["nombre"][i])
@@ -28,7 +29,7 @@ class DataProcessing ():
                         self.subject_data_frame["nombre"][j]))
             self.majors.append(major)
 
-
+        #  relleno de carreras en cada estudiante y crea lista de estudiantes
         for i in self.students_data_frame.index:
             student = m.Student(self.students_data_frame["cve_unica"][i],
                     self.students_data_frame["id_carrera"][i])
@@ -38,6 +39,7 @@ class DataProcessing ():
                     break
             self.students.append(student)
         
+        # relleno de grupos
         for i in self.group_data_frame.index:
             group = m.Group(
                 self.group_data_frame["id_materia"][i],
@@ -58,7 +60,6 @@ class DataProcessing ():
                 self.group_data_frame["sabado_final"][i],
             )
             self.groups.append(group)
-        print(self.majors[0])
         if True:
             pass
 

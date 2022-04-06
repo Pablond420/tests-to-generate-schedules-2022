@@ -10,11 +10,12 @@ def read_error_filter(path, name):
 
     if (name == 'estudiantes'):
         alert_id = 1 \
-            if shape[1]==2 and df.columns.values[0] == 'cve_unica' and df.columns.values[1] == 'id_carrera' else 2
+            if shape[1]==2 and df.columns.values[0] == 'cve_unica' \
+                and df.columns.values[1] == 'id_carrera' else 2
     elif(name == 'grupos'):
         alert_id = 3 \
             if shape[1]==16 and df.columns.values[0] == 'id_materia' and df.columns.values[1] == 'grupo' \
-                and df.columns.values[2] == 'maestro' and df.columns.values[3] == 'cupo' else 4
+                and df.columns.values[2] == 'maestro' and df.columns.values[3] == 'cupo' else 4# falta validar todas las columnas
     elif(name == 'carreras'):
         alert_id = 5 \
             if shape[1]==2 and df.columns.values[0] == 'id_carrera' and df.columns.values[1] == 'nombre' else 6
@@ -23,7 +24,6 @@ def read_error_filter(path, name):
             and df.columns.values[1] == 'id_carrera' and df.columns.values[2] == 'nombre' else 8
 
     return kind_of_alert(alert_id), df
-
 
 def kind_of_alert(id):
     alert_txt = ''
