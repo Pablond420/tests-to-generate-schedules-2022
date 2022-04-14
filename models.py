@@ -79,7 +79,6 @@ class Student ():
     def __init__(self, id , id_major):
         self.id = id
         self.id_major = id_major
-        self.schedule = np.zeros((14,6))
 
 
 

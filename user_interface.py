@@ -5,7 +5,7 @@ from PIL import ImageTk,Image
 import threading
 import data_reading as L
 import data_processing as p
-import methods as m
+import algorithm as al
 
 def ask_filename_csv(root: Tk):
 	filename = filedialog.askopenfilename(title="Selecciona un archivo", 
@@ -133,9 +133,7 @@ class UI(object):
 		self.Label5['text'] = "generando horarios iniciales"
 		process = p.DataProcessing(self.df_students,self.df_majors,self.df_subjects,self.df_groups)
 		process.df_to_classes()
-		print(m.get_student(530).id)
-		print(m.get_student(530).id_major)
-		# A.AlgoritmoIterativoV2(self)
+		al.algorithm()
 
 		# self.Label5['text'] = "calculando metricas"
 

@@ -9,28 +9,46 @@ def get_student(cve_unica):
             break
     return student
 
+def get_group(id_group):
+    group = None 
+    if id_group is not None:
+        for i in dp.DataProcessing.groups:
+            if i.id_group == id_group:
+                group = i
+                break
+    return group
+
+def decrease_slots(id_group):
+    for i in dp.DataProcessing.groups:
+        if i.id_group == id_group:
+            i.available_space -= 1
+
 def group_with_more_slots(subject,schedule):
     id_group = None
     aux = 0
     for group in dp.DataProcessing.groups:
-        if subject.id_subject != group.id_subject:
+        if subject.id_subject != group.id_subject or group.available_space < 1:
             pass
+        if schedule.is_busy(group):
+            pass
+
         if group.available_space > aux:
-            if not schedule.is_busy(group):
-                aux = group.available_space
-                id_group = group.id_group
+            aux = group.available_space
+            id_group = group.id_group
     return id_group
 
 def earliest_group(subject,schedule):
     id_group = None
     aux = 30
+        
     for group in dp.DataProcessing.groups:
-        if subject.id_subject != group.id_subject:
+        if subject.id_subject != group.id_subject or group.available_space < 1:
+            pass
+        if schedule.is_busy(group):
             pass
         if earliest_hour(group) < aux:
-            if not schedule.is_busy(group):
-                aux = earliest_hour(group)
-                id_group = group.id_group
+            aux = earliest_hour(group)
+            id_group = group.id_group
     return id_group
 
         
