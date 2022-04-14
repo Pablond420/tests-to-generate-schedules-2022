@@ -1,13 +1,86 @@
 
+from sqlalchemy import false
+import numpy as np
+
+class Schedule ():
+
+    schedule = np.zeros((14,6))
+    groups = []
+
+    def __init__(self) -> None:
+        pass
+
+    def set_hour(self, startTime, endTime, day):
+        self.schedule[startTime-7,day] = 1
+        if(endTime>startTime+1):
+            if(endTime==startTime+2):
+                self.schedule[endTime - (7 + 1),day] = 1
+            elif(endTime==startTime+3):
+                self.schedule[endTime - (7 + 1),day] = 1
+                self.schedule[endTime - (7 + 2),day] = 1
+    
+    def quit_hour(self, startTime, endTime, day):
+        self.schedule[startTime-7,day] = 0
+        if(endTime>startTime+1):
+            if(endTime==startTime+2):
+                self.schedule[endTime - (7 + 1),day] = 0
+            elif(endTime==startTime+3):
+                self.schedule[endTime - (7 + 1),day] = 0
+                self.schedule[endTime - (7 + 2),day] = 0
+
+#Con base en los parametros que llegan checa en la matriz si tiene un 1 , si es asi
+#esta ocupado.
+    def is_day_busy(self, startTime,endTime,day):
+        flag = True
+        if(self.schedule[startTime-7,day] == 1):
+          flag = False
+        elif(self.schedule[endTime-8,day] == 1):
+          flag = False
+        return flag
+    
+    def is_busy(self,group):
+        flag = False
+        if not self.is_day_busy(group.monday_start,group.monday_end,0):
+            flag = True
+        elif not self.is_day_busy(group.tuesday_start,group.tuesday_end,1):
+            flag = True
+        elif not self.is_day_busy(group.wednesday_start,group.wednesday_end,2):
+            flag = True
+        elif not self.is_day_busy(group.thursday_start,group.thursday_end,3):
+            flag = True
+        elif not self.is_day_busy(group.friday_start,group.friday_end,4):
+            flag = True
+        elif not self.is_day_busy(group.saturday_start,group.saturday_end,5):
+            flag = True
+        return flag
+    
+    def enroll_subject(self, group):
+        self.set_hour(group.monday_start,group.monday_end,0)
+        self.set_hour(group.tuesday_start,group.tuesday_end,1)
+        self.set_hour(group.wednesday_start,group.wednesday_end,2)
+        self.set_hour(group.thursday_start,group.thursday_end,3)
+        self.set_hour(group.friday_start,group.friday_end,4)
+        self.set_hour(group.saturday_start,group.saturday_end,5)
+
+    def quit_subject(self, group):
+        self.quit_hour(group.monday_start,group.monday_end,0)
+        self.quit_hour(group.tuesday_start,group.tuesday_end,1)
+        self.quit_hour(group.wednesday_start,group.wednesday_end,2)
+        self.quit_hour(group.thursday_start,group.thursday_end,3)
+        self.quit_hour(group.friday_start,group.friday_end,4)
+        self.quit_hour(group.saturday_start,group.saturday_end,5)
+
 class Student ():
     id = None
     id_major = None
-    schedule = None
+    schedule = Schedule()
     major = None
 
     def __init__(self, id , id_major):
         self.id = id
         self.id_major = id_major
+        self.schedule = np.zeros((14,6))
+
 
 
 class Major ():
@@ -23,11 +96,13 @@ class Major ():
 class Subject():
     id_subject = None
     name = None 
+    is_enrolled = None
     groups = []
 
     def __init__(self, id_subject, name):
         self.id_subject = id_subject
         self.name = name
+        self.is_enrolled = false
 
     def add_group(self, group):
         self.groups.append(Group())
