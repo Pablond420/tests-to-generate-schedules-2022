@@ -93,12 +93,14 @@ class Major ():
 
 
 class Subject():
+    id_major = None
     id_subject = None
     name = None 
     is_enrolled = None
     groups = []
 
-    def __init__(self, id_subject, name):
+    def __init__(self, id_major, id_subject, name):
+        self.id_major = id_major
         self.id_subject = id_subject
         self.name = name
         self.is_enrolled = false

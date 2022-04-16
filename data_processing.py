@@ -9,6 +9,7 @@ class DataProcessing ():
     majors = []
     students = []
     groups = []
+    subjects = []
 
     def __init__(self,stu_df,m_df,sub_df,g_df):
         self.students_data_frame = stu_df
@@ -18,27 +19,6 @@ class DataProcessing ():
 
     def df_to_classes(self):
 
-        # Relleno de materias en cada carrera y crea lista de carreras
-        for i in self.major_data_frame.index: 
-            major = m.Major(self.major_data_frame["id_carrera"][i],
-                    self.major_data_frame["nombre"][i])
-            for j in self.subject_data_frame.index:
-                if major.id_major == self.subject_data_frame["id_carrera"][j]:
-                    major.subjects.append( m.Subject(
-                        self.subject_data_frame["id_materia"][j],
-                        self.subject_data_frame["nombre"][j]))
-            self.majors.append(major)
-
-        #  relleno de carreras en cada estudiante y crea lista de estudiantes
-        for i in self.students_data_frame.index:
-            student = m.Student(self.students_data_frame["cve_unica"][i],
-                    self.students_data_frame["id_carrera"][i])
-            for major in self.majors:
-                if major.id_major == student.id_major:
-                    student.major = major
-                    break
-            self.students.append(student)
-        
         # relleno de grupos
         for i in self.group_data_frame.index:
             group = m.Group(
@@ -60,8 +40,39 @@ class DataProcessing ():
                 self.group_data_frame["sabado_final"][i],
             )
             self.groups.append(group)
-        if True:
-            pass
+
+        #Relleno de grupos en cada materia
+        for i in self.subject_data_frame.index:
+            subject = m.Subject(
+                self.subject_data_frame["id_carrera"][i],
+                self.subject_data_frame["id_materia"][i],
+                self.subject_data_frame["nombre"][i]
+            )
+            for j in self.groups:
+                if j.id_subject == subject.id_subject:
+                    subject.groups.append(j)
+            self.subjects.append(subject)
+
+        # Relleno de materias en cada carrera y crea lista de carreras
+        for i in self.major_data_frame.index: 
+            major = m.Major(self.major_data_frame["id_carrera"][i],
+                    self.major_data_frame["nombre"][i])
+            for j in self.subjects:
+                if major.id_major == j.id_major:
+                    major.subjects.append(j)
+            self.majors.append(major)
+
+        #  relleno de carreras en cada estudiante y crea lista de estudiantes
+        for i in self.students_data_frame.index:
+            student = m.Student(self.students_data_frame["cve_unica"][i],
+                    self.students_data_frame["id_carrera"][i])
+            for major in self.majors:
+                if major.id_major == student.id_major:
+                    student.major = major
+                    break
+            self.students.append(student)
+        
+        
 
 
     
